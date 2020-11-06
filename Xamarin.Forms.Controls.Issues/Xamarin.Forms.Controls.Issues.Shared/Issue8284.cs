@@ -1,7 +1,9 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 using Xamarin.Forms;
@@ -17,6 +19,7 @@ namespace Xamarin.Forms.Controls.Issues
 		protected override void Init()
 		{
 			var listView = new ListView(ListViewCachingStrategy.RecycleElement);
+			//var listView = new ListView(ListViewCachingStrategy.RetainElement);
 			listView.ItemTemplate = new DataTemplate(typeof(CustomViewCell));
 
 			var source = new ObservableCollection<string>();
@@ -28,7 +31,7 @@ namespace Xamarin.Forms.Controls.Issues
 				Children = {
 					new Label { Text = $"Press 'Add' or 'Remove' and check if the 'ContextActions' are being added." +
 					                   $"Verify that by long-pressing an item in the {nameof(ListView)}" +
-					                   $"The {nameof(ListView)} uses {nameof(ListViewCachingStrategy.RecycleElement)}" },
+					                   $"The {nameof(ListView)} uses {nameof(ListViewCachingStrategy.RecycleElement)}", TextColor=Color.Yellow }, 
 					listView
 				}
 			};
@@ -46,7 +49,10 @@ namespace Xamarin.Forms.Controls.Issues
 				var menuItem = new MenuItem() { Text = "Item" };
 
 				var addButton = new Button { Text = "Add" };
-				addButton.Clicked += (sender, args) => ContextActions.Add(menuItem);
+				addButton.Clicked += (sender, args) =>
+				{
+					ContextActions.Add(menuItem);
+				};
 
 				var removeButton = new Button { Text = "Remove" };
 				removeButton.Clicked += (sender, args) =>
